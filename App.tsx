@@ -5,19 +5,19 @@ import React, { useState } from 'react'
 import { object, number } from 'yup';
 
 let PasswordSchema = object({
-  passwordLength: number().required('This is a required field').positive().integer().min(4,'Minimum Should be 4').max(12,'maximum should be 12')
-});  
+  passwordLength: number().required('This is a required field').positive().integer().min(4, 'Minimum Should be 4').max(12, 'maximum should be 12')
+});
 
 export default function App() {
-  
-  const [passowrd,setPassword] = useState('')
-  const [isPasswordGenerated,setIsPasswordGenerated] = useState(false)
-  const [LowerCase,setLowerCase] = useState(false)
-  const [UpperCase,setUpperCase] = useState(false)
-  const [Number,setNumber] = useState(false)
-  const [Symbol,setSymbol] = useState(false)
 
-  const GeneratePassowrdString = (passwordLength:number)=>{
+  const [passowrd, setPassword] = useState('')
+  const [isPasswordGenerated, setIsPasswordGenerated] = useState(false)
+  const [LowerCase, setLowerCase] = useState(false)
+  const [UpperCase, setUpperCase] = useState(false)
+  const [Number, setNumber] = useState(false)
+  const [Symbol, setSymbol] = useState(false)
+
+  const GeneratePassowrdString = (passwordLength: number) => {
     let characterList = ''
 
     const CapLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -35,12 +35,12 @@ export default function App() {
       characterList += Numbers
     }
     if (Symbol) {
-      characterList += Symbols 
+      characterList += Symbols
     }
 
-    const passowrd = CreatePassowrd( passwordLength , characterList )
+    const passowrd = CreatePassowrd(passwordLength, characterList)
   }
-  const CreatePassowrd = (passwordLength:number, characters: string)=>{
+  const CreatePassowrd = (passwordLength: number, characters: string) => {
     let result = ''
     for (let i = 0; i < passwordLength; i++) {
       const characterIndex = Math.round(Math.random() * characters.length)
@@ -48,8 +48,12 @@ export default function App() {
     }
     return result
   }
-  const ResetPassowrdState = ()=>{ 
-    //
+  const ResetPassowrdState = () => {
+    setPassword('')
+    setLowerCase(true )
+    setUpperCase(false)
+    setNumber(false)
+    setSymbol(false)
   }
 
 
@@ -61,7 +65,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  text:{
-    color:"#fff"
+  text: {
+    color: "#fff"
   }
 })
