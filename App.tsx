@@ -40,7 +40,8 @@ export default function App() {
       characterList += Symbols
     }
 
-    const passowrd = CreatePassowrd(passwordLength, characterList)
+    const passowrdresult = CreatePassowrd(passwordLength, characterList)
+    setPassword(passowrdresult)
   }
 
   const CreatePassowrd = (passwordLength: number, characters: string) => {
@@ -49,6 +50,7 @@ export default function App() {
       const characterIndex = Math.round(Math.random() * characters.length)
       result += characters.charAt(characterIndex)
     }
+    setIsPasswordGenerated(true)
     return result
   }
 
@@ -58,11 +60,12 @@ export default function App() {
     setUpperCase(false)
     setNumber(false)
     setSymbol(false)
+    setIsPasswordGenerated(false)
   }
 
 
   return (
-    <ScrollView keyboardShouldPersistTaps="handled">
+    <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator  >
       <SafeAreaView style={styles.appContainer}>
         <View style={styles.formContainer} >
           <Text style={styles.title} >Password Generator</Text>
@@ -95,66 +98,84 @@ export default function App() {
                     )}
                   </View>
                   <TextInput style={styles.inputStyle}
-                      value={values.passwordLength}
-                      onChangeText={handleChange('passwordLength')}
-                      placeholder='Ex. 8'
-                      keyboardType='numeric'
-                    />
+                    value={values.passwordLength}
+                    onChangeText={handleChange('passwordLength')}
+                    placeholder='Ex. 8'
+                    keyboardType='numeric'
+                  />
                 </View>
                 <View style={styles.inputWrapper} >
-                  <Text style={styles.heading} >
-                    Lower Case
-                  </Text>
-                  <BouncyCheckbox 
-                    isChecked={LowerCase}
-                    fillColor="red" 
-                    onPress={() => {setLowerCase(!LowerCase)}} 
-                  > </BouncyCheckbox>
+                  <View>
+                    <Text style={styles.heading} >
+                      Lower Case
+                    </Text>
+                  </View>
+                  <View>
+                    <BouncyCheckbox
+                      isChecked={LowerCase}
+                      fillColor="red"
+                      onPress={() => { setLowerCase(!LowerCase) }}
+                    > </BouncyCheckbox>
+                  </View>
                 </View>
-                <View style={[styles.inputWrapper,styles.test]} >
-                  <Text style={styles.heading} >
-                    Upper Case
-                  </Text>
-                  <BouncyCheckbox 
-                    isChecked={UpperCase}
-                    fillColor="green" 
-                    onPress={() => {setUpperCase(!UpperCase)}} 
-                  > </BouncyCheckbox></View>
+                <View style={[styles.inputWrapper, styles.test]} >
+                  <View>
+                    <Text style={styles.heading} >
+                      Upper Case
+                    </Text>
+                  </View>
+                  <View>
+                    <BouncyCheckbox
+                      isChecked={UpperCase}
+                      fillColor="green"
+                      onPress={() => { setUpperCase(!UpperCase) }}
+                    > </BouncyCheckbox></View>
+                </View>
                 <View style={styles.inputWrapper} >
-                  <Text style={styles.heading} >
-                    Number
-                  </Text>
-                  <BouncyCheckbox 
-                    isChecked={Number}
-                    fillColor="blue" 
-                    onPress={() => {setNumber(!Number)}} 
-                  > </BouncyCheckbox></View>
+                  <View>
+                    <Text style={styles.heading} >
+                      Number
+                    </Text>
+                  </View>
+                  <View>
+                    <BouncyCheckbox
+                      isChecked={Number}
+                      fillColor="blue"
+                      onPress={() => { setNumber(!Number) }}
+                    ></BouncyCheckbox>
+                  </View>
+                </View>
                 <View style={styles.inputWrapper} >
-                  <Text style={styles.heading} >
-                    Symbol
-                  </Text>
-                  <BouncyCheckbox 
-                    isChecked={Symbol}
-                    fillColor="orange" 
-                    onPress={() => {setSymbol(!Symbol)}} 
-                  > </BouncyCheckbox></View>
+                  <View>
+                    <Text style={styles.heading} >
+                      Symbol
+                    </Text>
+                  </View>
+                  <View>
+                    <BouncyCheckbox
+                      isChecked={Symbol}
+                      fillColor="orange"
+                      onPress={() => { setSymbol(!Symbol) }}
+                    > </BouncyCheckbox>
+                  </View>
+                </View>
 
 
                 <View style={styles.formActions} >
                   <TouchableOpacity
                     disabled={!isValid}
                     style={styles.primaryBtn}
-                    onPress={()=>(handleSubmit())}
-                   >
+                    onPress={() => (handleSubmit())}
+                  >
                     <Text style={styles.primaryBtnTxt}>Generate Password</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.secondaryBtn}  
-                    onPress={()=>{
+                    style={styles.secondaryBtn}
+                    onPress={() => {
                       handleReset();
                       ResetPassowrdState()
-                     }}
-                   
+                    }}
+
                   >
                     <Text style={styles.secondaryBtnTxt}  >Reset</Text>
                   </TouchableOpacity>
@@ -163,17 +184,24 @@ export default function App() {
             )}
           </Formik>
         </View>
+        {isPasswordGenerated ? (
+          <View style={[styles.card, styles.cardElevated]}>
+            <Text style={styles.subTitle}>Result : </Text>
+            <Text style={styles.description}>Long press to copy</Text>
+            <Text selectable={true} style={styles.generatedPassword}>{passowrd}</Text>
+          </View>
+        ) : null}
       </SafeAreaView>
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  test:{
+  test: {
     // backgroundColor:"red",
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-around',
+    // display:'flex',
+    // flexDirection:'row',
+    // justifyContent:'space-around',
 
   },
   text: {
@@ -211,6 +239,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
+    // backgroundColor:'#fff'
   },
   inputColumn: {
     flexDirection: 'column',
@@ -256,6 +285,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 6,
     marginHorizontal: 12,
+    // color:'#fff'
   },
   cardElevated: {
     backgroundColor: '#ffffff',
